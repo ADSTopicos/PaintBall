@@ -14,7 +14,7 @@ public class Principal {
     public static void main(String[] args) {
         // CRIA A JANELA ------------------------------------
         JFrame janela = new JFrame("PaintBall");
-
+        
         Game game = new Game();
         game.setPreferredSize(new Dimension(LARGURA_TELA, ALTURA_TELA)); // precisa importar a classe "dimension"
         janela.add(game);
