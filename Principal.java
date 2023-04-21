@@ -23,7 +23,7 @@ public class Principal {
         // janela.setSize(LARGURA_TELA, ALTURA_TELA);
         janela.setResizable(false); // desabilita opção do jogador redimensionar
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // fecha completamente o jogo
-        janela.setLocation(400, 150); // define local onde a janela vai aparecer no monitor
+        janela.setLocation(350, 150); // define local onde a janela vai aparecer no monitor
         janela.setVisible(true); // torna a janela visivel
 
         janela.pack(); // infla, redimensiona tela a partir da classe "game"
