@@ -18,6 +18,9 @@ public class Personagem {
     public int velX;
     public int velY;
 
+    public int centroX; // VARIAVEIS PARA COLISAO DO PERSONANGENS
+	public int centroY;
+
     // ATRIBUTOS PERSONAGEM 2
     public int raio2;
     public int posX2;
@@ -33,16 +36,19 @@ public class Personagem {
     public BufferedImage mGreenBaixoDireita;
     public BufferedImage mGreenBaixoEsquerda;
 
+    public int centroX2; // VARIAVEIS PARA COLISAO DO PERSONANGENS
+	public int centroY2;
+
     public Personagem() {
         // PERSONAGEM 1
-        raio = 25;
+        raio = 20;
         velX = 2;
         velY = 2;
         posX = 100;
         posY = 100;
 
         // ATRIBUTOS PERSONAGEM 2
-        raio2 = 25;
+        raio2 = 20;
         velX2 = 2;
         velY2 = 2;
         posX2 = 500;
@@ -71,6 +77,14 @@ public class Personagem {
 		}catch (Exception e) {
 			System.out.println("Erro ao carregar a imagem!" + e);
 		}
+
+
+        // COLISAO ENTRE PERSONAGENS
+        centroX = posX + raio;
+        centroY = posY + raio;
+
+        centroX2 = posX2 + raio2;
+        centroY2 = posY2 + raio2;
     }
 
 }

@@ -167,6 +167,7 @@ public class Game extends JPanel {
                 imgAtual = pers1.mBlueDireita;
         }
         
+        // MOVIMENTOS EM TODOS OS SENTIDOS PERS 1
         if (k_cima == true) {
             pers1.velY = -3;
             imgAtual = pers1.mBlueCima;
@@ -210,22 +211,37 @@ public class Game extends JPanel {
             imgPers2 = pers2.mGreenEsquerda;
         }
         
-        // PRECISA IMPLEMENTAR MOVIMENTOS DIAGONAIS DO PERS 2
+        // MOVIMENTOS EM TODOS OS SENTIDOS PERS 2
         if (k_cima2 == true) {
             pers2.velY2 = -3;
             imgPers2 = pers2.mGreenCima;
-        }
-        if (k_direita2 == true) {
-            pers2.velX2 = 3;
-            imgPers2 = pers2.mGreenDireita;
-        }
-        if (k_esquerda2 == true) {
-            pers2.velX2 = -3;
-            imgPers2 = pers2.mGreenEsquerda;
-        }
-        if (k_baixo2 == true) {
+
+            if (k_direita2 == true){
+                pers2.velX2 = 3;
+                imgPers2 = pers2.mGreenCimaDireita;
+            }
+            if(k_esquerda2 == true){
+                pers2.velX2 = -3;
+                imgPers2 = pers2.mGreenCimaEsquerda;
+            }
+        } else if(k_baixo2 == true){
             pers2.velY2 = 3;
             imgPers2 = pers2.mGreenBaixo;
+
+            if(k_direita2 == true){
+                pers2.velX2 = 3;
+                imgPers2 = pers2.mGreenBaixoDireita;
+            }
+            if(k_esquerda2 == true){
+                pers2.velX2 = -3;
+                imgPers2 = pers2.mGreenBaixoEsquerda;
+            }
+        } else if (k_esquerda2 == true){
+            pers2.velX2 = -3;
+            imgPers2 = pers2.mGreenEsquerda;
+        } else if(k_direita2 == true){
+            pers2.velX2 = 3;
+            imgPers2 = pers2.mGreenDireita;
         }
 
     }
@@ -239,6 +255,13 @@ public class Game extends JPanel {
         pers2.posX2 = pers2.posX2 + pers2.velX2;
         pers2.posY2 = pers2.posY2 + pers2.velY2;
 
+        // ATUALIZAÇÃO DO CENTRO DO PERSONAGEM 1
+		pers1.centroX = pers1.posX + pers1.raio;
+		pers1.centroY = pers1.posY + pers1.raio;
+
+        pers2.centroX2 = pers2.posX2 + pers2.raio2;
+		pers2.centroY2 = pers2.posY2 + pers2.raio2;
+        
         testeColisoes();
     }
 
@@ -248,7 +271,7 @@ public class Game extends JPanel {
 
     // OUTROS METODOS -------------------------
     public void testeColisoes() {
-        // TESTA COLISAO DO JOGADOR 1
+        // TESTA COLISAO DO JOGADOR 1 COM A TELA
         if (pers1.posX + (pers1.raio * 2) >= Principal.LARGURA_TELA || pers1.posX <= 0) {
             pers1.posX = pers1.posX - pers1.velX; // desfaz o movimento
         }
@@ -256,7 +279,7 @@ public class Game extends JPanel {
             pers1.posY = pers1.posY - pers1.velY; // desfaz o movimento
         }
 
-        // TESTA COLISAO DO JOGADOR 2
+        // TESTA COLISAO DO JOGADOR 2 COM A TELA
         if (pers2.posX2 + (pers2.raio2 * 2) >= Principal.LARGURA_TELA || pers2.posX2 <= 0) {
             pers2.posX2 = pers2.posX2 - pers2.velX2; // desfaz o movimento
         }
@@ -264,6 +287,27 @@ public class Game extends JPanel {
             pers2.posY2 = pers2.posY2 - pers2.velY2; // desfaz o movimento
         }
 
+        // TESTE DE COLISAO ENTRE JOGADORES (DO 1 PARA 2)
+        int ch = Math.abs(pers1.centroX - pers2.centroX2);
+        int cv = Math.abs(pers1.centroY - pers2.centroY2);
+		double h = Math.sqrt((ch * ch) + (cv * cv));
+
+        if(h <= pers1.raio + pers2.raio2){
+			// DESFAZER O ULTIMO MOVIMENTO
+			pers1.posX = pers1.posX - pers1.velX;
+			pers1.posY = pers1.posY - pers1.velY;
+		}
+
+        // TESTE DE COLISAO ENTRE JOGADORES (DO 2 PARA 1)
+        int ch2 = Math.abs(pers2.centroX2 - pers1.centroX);
+        int cv2 = Math.abs(pers2.centroY2 - pers1.centroY);
+		double h2 = Math.sqrt((ch2 * ch2) + (cv2 * cv2));
+
+        if(h2 <= pers2.raio2 + pers1.raio){
+			// DESFAZER O ULTIMO MOVIMENTO
+			pers2.posX2 = pers2.posX2 - pers2.velX2;
+			pers2.posY2 = pers2.posY2 - pers2.velY2;
+		}
     }
 
     // MÉTODOS SOBRESCRITOS -----------------------------------
@@ -275,13 +319,15 @@ public class Game extends JPanel {
         // g.setColor(Color.decode("#FF8095")); // MUDA A COR DO PERS1
         // g.fillOval(pers1.posX, pers1.posY, pers1.raio * 2, pers1.raio * 2); //
         // desenha bola
-        g.setColor(Color.decode("#80FF80")); // MUDA A COR DO PERS2
-        // g.fillOval(pers2.posX2, pers2.posY2, pers2.raio * 2, pers2.raio * 2); //
+        g.setColor(Color.red); // MUDA A COR DO PERS2
+        //g.fillOval(pers2.posX2, pers2.posY2, pers2.raio * 2, pers2.raio * 2); //
+        //g.fillOval(pers1.posX, pers1.posY, pers1.raio * 2, pers1.raio * 2); //
         // desenha bola
 
+        // DESENHA IMAGEM COM PERSONAGEM
         g.drawImage(imgAtual, pers1.posX, pers1.posY, null); // comando
         g.drawImage(imgPers2, pers2.posX2, pers2.posY2, null); // comando
-        // que desenha a bola COM IMAGEM
+        
 
     }
 }
