@@ -11,19 +11,22 @@ public class Game extends JPanel {
     public Personagem pers1 = new Personagem();
 
     public Personagem pers2 = new Personagem();
-    
+
     // CONTROLE PERS1
     private boolean k_cima = false;
     private boolean k_baixo = false;
     private boolean k_direita = false;
     private boolean k_esquerda = false;
     
+
     // CONTROLE PERS2
     private boolean k_cima2 = false;
     private boolean k_baixo2 = false;
     private boolean k_direita2 = false;
     private boolean k_esquerda2 = false;
+    
 
+    // ATRIBUTOS QUE AS IMAGENS DOS PERSONAGENS SERAO CARREGADAS
     private BufferedImage imgAtual;
     private BufferedImage imgPers2;
 
@@ -79,14 +82,14 @@ public class Game extends JPanel {
             }
         });
 
-         // INICIA TRATAMETNO COM TECLADO DO PERS2
-         addKeyListener(new KeyListener() {
+        // INICIA TRATAMETNO COM TECLADO DO PERS2
+        addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
 
             }
 
-            // RELEASED = QUANDO SOLTA A TECLA
+            // RELEASED = QUANDO SOLTA A TECLA PERS 2
             @Override
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
@@ -105,7 +108,7 @@ public class Game extends JPanel {
                 }
             }
 
-            // PRESSED = QUANDO APERTA A TECLA
+            // PRESSED = QUANDO APERTA A TECLA PERS 2
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
@@ -150,42 +153,71 @@ public class Game extends JPanel {
         }
     }
 
-    // GAMELOOP CADA EVENTO SEPARADO (handlerEvents / update
-    // /render)-------------------------------
+    // GAMELOOP CADA EVENTO SEPARADO (handlerEvents / update / render)-------------------------------
     public void handlerEvents() {
 
         // CONTROLANDO PERS1
         pers1.velX = 0;
         pers1.velY = 0;
-        imgAtual = pers1.mBlueDireita;
+
+        // SE O PERSONAGEM 1 ESTIVER A ESQUERDA DO PERS 2 ENTAO VIRE PERS 1 PARA DIREITA
+        if(pers2.posX2 < pers1.posX){
+            imgAtual = pers1.mBlueEsqueda;
+            } else {
+                imgAtual = pers1.mBlueDireita;
+        }
+        
         if (k_cima == true) {
             pers1.velY = -3;
             imgAtual = pers1.mBlueCima;
-        }
-        if (k_direita == true) {
+
+            if (k_direita == true){
+                pers1.velX = 3;
+                imgAtual = pers1.mBlueCimaDireita;
+            }
+            if(k_esquerda == true){
+                pers1.velX = -3;
+                imgAtual = pers1.mBlueCimaEsquerda;
+            }
+        } else if(k_baixo == true){
+            pers1.velY = 3;
+            imgAtual = pers1.mBlueBaixo;
+
+            if(k_direita == true){
+                pers1.velX = 3;
+                imgAtual = pers1.mBlueBaixoDireita;
+            }
+            if(k_esquerda == true){
+                pers1.velX = -3;
+                imgAtual = pers1.mBlueBaixoEsquerda;
+            }
+        } else if (k_esquerda == true){
+            pers1.velX = -3;
+            imgAtual = pers1.mBlueEsqueda;
+        } else if(k_direita == true){
             pers1.velX = 3;
             imgAtual = pers1.mBlueDireita;
         }
-        if (k_esquerda == true) {
-            pers1.velX = -3;
-            imgAtual = pers1.mBlueEsqueda;
-        }
-        if (k_baixo == true) {
-            pers1.velY = 3;
-            imgAtual = pers1.mBlueBaixo;
-        }
-
+        
         // CONTROLANDO PERS2
         pers2.velX2 = 0;
         pers2.velY2 = 0;
-        imgPers2 = pers2.mGreenEsquerda;
+
+        // SE O PERSONAGEM 2 ESTIVER A ESQUERDA DO PERS 1 ENTAO VIRE PERS 2 PARA DIREITA
+        if(pers2.posX2 < pers1.posX){
+        imgPers2 = pers2.mGreenDireita;
+        } else {
+            imgPers2 = pers2.mGreenEsquerda;
+        }
+        
+        // PRECISA IMPLEMENTAR MOVIMENTOS DIAGONAIS DO PERS 2
         if (k_cima2 == true) {
             pers2.velY2 = -3;
             imgPers2 = pers2.mGreenCima;
         }
         if (k_direita2 == true) {
             pers2.velX2 = 3;
-            imgPers2 = pers2.mGreeDireita;
+            imgPers2 = pers2.mGreenDireita;
         }
         if (k_esquerda2 == true) {
             pers2.velX2 = -3;
@@ -216,6 +248,7 @@ public class Game extends JPanel {
 
     // OUTROS METODOS -------------------------
     public void testeColisoes() {
+        // TESTA COLISAO DO JOGADOR 1
         if (pers1.posX + (pers1.raio * 2) >= Principal.LARGURA_TELA || pers1.posX <= 0) {
             pers1.posX = pers1.posX - pers1.velX; // desfaz o movimento
         }
@@ -223,6 +256,7 @@ public class Game extends JPanel {
             pers1.posY = pers1.posY - pers1.velY; // desfaz o movimento
         }
 
+        // TESTA COLISAO DO JOGADOR 2
         if (pers2.posX2 + (pers2.raio2 * 2) >= Principal.LARGURA_TELA || pers2.posX2 <= 0) {
             pers2.posX2 = pers2.posX2 - pers2.velX2; // desfaz o movimento
         }
@@ -242,7 +276,8 @@ public class Game extends JPanel {
         // g.fillOval(pers1.posX, pers1.posY, pers1.raio * 2, pers1.raio * 2); //
         // desenha bola
         g.setColor(Color.decode("#80FF80")); // MUDA A COR DO PERS2
-        //g.fillOval(pers2.posX2, pers2.posY2, pers2.raio * 2, pers2.raio * 2); // desenha bola
+        // g.fillOval(pers2.posX2, pers2.posY2, pers2.raio * 2, pers2.raio * 2); //
+        // desenha bola
 
         g.drawImage(imgAtual, pers1.posX, pers1.posY, null); // comando
         g.drawImage(imgPers2, pers2.posX2, pers2.posY2, null); // comando
