@@ -17,7 +17,7 @@ public class Game extends JPanel {
     private boolean k_baixo = false;
     private boolean k_direita = false;
     private boolean k_esquerda = false;
-    
+    private boolean k_tiro = false;
 
     // CONTROLE PERS2
     private boolean k_cima2 = false;
@@ -29,6 +29,10 @@ public class Game extends JPanel {
     // ATRIBUTOS QUE AS IMAGENS DOS PERSONAGENS SERAO CARREGADAS
     private BufferedImage imgAtual;
     private BufferedImage imgPers2;
+
+    // CRIANDO OBJETO TIRO
+    Tiro tiro = new Tiro();
+
 
     // MÉTODO CONSTRUTOR ---------------------------------------
     public Game() {
@@ -59,6 +63,10 @@ public class Game extends JPanel {
                     case KeyEvent.VK_D:
                         k_direita = false;
                         break;
+
+                    /*case KeyEvent.VK_Q:
+                       k_tiro = false;
+                       break;*/
                 }
             }
 
@@ -77,6 +85,9 @@ public class Game extends JPanel {
                         break;
                     case KeyEvent.VK_D:
                         k_direita = true;
+                        break;
+                    case KeyEvent.VK_Q:
+                        k_tiro = true;
                         break;
                 }
             }
@@ -167,6 +178,13 @@ public class Game extends JPanel {
                 imgAtual = pers1.mBlueDireita;
         }
         
+        // TECLA QUE DISPARA O TIRO
+        if(k_tiro == true && k_baixo == true){
+            tiro.posY = tiro.posY + tiro.velY;
+            System.out.println("atirando!!");
+        }
+
+
         // MOVIMENTOS EM TODOS OS SENTIDOS PERS 1
         if (k_cima == true) {
             pers1.velY = -3;
@@ -250,6 +268,15 @@ public class Game extends JPanel {
         // MANIPULAÇÃO DO PERSONAGEM 1
         pers1.posX = pers1.posX + pers1.velX;
         pers1.posY = pers1.posY + pers1.velY;
+        
+        //TIRO DE PERS 1 SE MOVIMENTA NA MESMA POSIÇÃO QUE O PERSONAGEM
+        
+        if(k_tiro == false){
+            tiro.posX = pers1.posX;
+            tiro.posY = pers1.posY;
+        } else {
+            tiro.posY = tiro.posY + tiro.velY;
+        }
 
         // MANIPULAÇÃO DO PERSONAGEM 2
         pers2.posX2 = pers2.posX2 + pers2.velX2;
@@ -321,7 +348,7 @@ public class Game extends JPanel {
         // desenha bola
         g.setColor(Color.red); // MUDA A COR DO PERS2
         //g.fillOval(pers2.posX2, pers2.posY2, pers2.raio * 2, pers2.raio * 2); //
-        //g.fillOval(pers1.posX, pers1.posY, pers1.raio * 2, pers1.raio * 2); //
+        g.fillOval(tiro.posX, tiro.posY, tiro.raio * 2, tiro.raio * 2); //
         // desenha bola
 
         // DESENHA IMAGEM COM PERSONAGEM
