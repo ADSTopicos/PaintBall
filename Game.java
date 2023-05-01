@@ -12,6 +12,10 @@ public class Game extends JPanel {
 
     public Personagem pers2 = new Personagem();
 
+    // CRIANDO OBJETO TIRO
+    Tiro tiro = new Tiro();
+    
+
     // CONTROLE PERS1
     private boolean k_cima = false;
     private boolean k_baixo = false;
@@ -30,16 +34,12 @@ public class Game extends JPanel {
     private BufferedImage imgAtual;
     private BufferedImage imgPers2;
 
-    // CRIANDO OBJETO TIRO
-    Tiro tiro = new Tiro();
-
-
     // MÉTODO CONSTRUTOR ---------------------------------------
     public Game() {
         setBackground(Color.decode("#ffe6f9"));
         setFocusable(true);
         setLayout(null);
-
+        
         // INICIA TRATAMETNO COM TECLADO DO PERS1
         addKeyListener(new KeyListener() {
             @Override
@@ -179,9 +179,8 @@ public class Game extends JPanel {
         }
         
         // TECLA QUE DISPARA O TIRO
-        if(k_tiro == true && k_baixo == true){
-            tiro.posY = tiro.posY + tiro.velY;
-            System.out.println("atirando!!");
+        if(k_tiro == true){
+            update();
         }
 
 
@@ -269,14 +268,14 @@ public class Game extends JPanel {
         pers1.posX = pers1.posX + pers1.velX;
         pers1.posY = pers1.posY + pers1.velY;
         
-        //TIRO DE PERS 1 SE MOVIMENTA NA MESMA POSIÇÃO QUE O PERSONAGEM
-        
-        if(k_tiro == false){
+        //TIRO DE PERS 1
+        if(k_tiro == true){
             tiro.posX = pers1.posX;
             tiro.posY = pers1.posY;
-        } else {
-            tiro.posY = tiro.posY + tiro.velY;
+            tiro.posX = tiro.posX + tiro.velX;
         }
+        
+        
 
         // MANIPULAÇÃO DO PERSONAGEM 2
         pers2.posX2 = pers2.posX2 + pers2.velX2;
@@ -338,6 +337,8 @@ public class Game extends JPanel {
     }
 
     // MÉTODOS SOBRESCRITOS -----------------------------------
+
+    Tiro tiro2 = new Tiro();
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // faça o que a classe original faz
@@ -346,14 +347,18 @@ public class Game extends JPanel {
         // g.setColor(Color.decode("#FF8095")); // MUDA A COR DO PERS1
         // g.fillOval(pers1.posX, pers1.posY, pers1.raio * 2, pers1.raio * 2); //
         // desenha bola
-        g.setColor(Color.red); // MUDA A COR DO PERS2
-        //g.fillOval(pers2.posX2, pers2.posY2, pers2.raio * 2, pers2.raio * 2); //
-        g.fillOval(tiro.posX, tiro.posY, tiro.raio * 2, tiro.raio * 2); //
+        g.setColor(Color.decode("#290066")); // MUDA A COR DO PERS2
+        // g.fillOval(pers2.posX2, pers2.posY2, pers2.raio * 2, pers2.raio * 2); //
+        
+        g.fillOval(tiro.posX, tiro.posY, 0, 0); //
+        if(k_tiro == true){
+            g.fillOval(tiro.posX, tiro.posY, tiro.raio * 2, tiro.raio * 2); //
+            update();
+        }
         // desenha bola
-
         // DESENHA IMAGEM COM PERSONAGEM
         g.drawImage(imgAtual, pers1.posX, pers1.posY, null); // comando
-        g.drawImage(imgPers2, pers2.posX2, pers2.posY2, null); // comando
+        g.drawImage(imgPers2, pers2.posX2, pers2.posY2, null); // comando 
         
 
     }

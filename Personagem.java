@@ -41,14 +41,14 @@ public class Personagem {
 
     public Personagem() {
         // PERSONAGEM 1
-        raio = 20;
+        raio = 25;
         velX = 2;
         velY = 2;
         posX = 100;
         posY = 100;
 
         // ATRIBUTOS PERSONAGEM 2
-        raio2 = 20;
+        raio2 = 25;
         velX2 = 2;
         velY2 = 2;
         posX2 = 500;
