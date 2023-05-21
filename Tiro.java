@@ -4,14 +4,16 @@ public class Tiro {
     public int posY;
     public int velX;
     public int velY;
-
+    public boolean visible;
 
     public Tiro(){
         raio = 4;
-        
-        velX = 2;
-        velY = 2;
+        visible = false;
+        velX = 0;
+        velY = 0;
     }
+
+    
 
 
 
