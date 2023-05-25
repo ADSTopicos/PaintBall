@@ -15,6 +15,8 @@ public class Game extends JPanel {
     // CRIANDO OBJETO TIRO
     Tiro tiro = new Tiro();
 
+    Tiro tiro2 = new Tiro();
+
     // CONTROLE PERS1
     private boolean k_cima = false;
     private boolean k_baixo = false;
@@ -27,6 +29,7 @@ public class Game extends JPanel {
     private boolean k_baixo2 = false;
     private boolean k_direita2 = false;
     private boolean k_esquerda2 = false;
+    private boolean k_tiro2 = false;
 
     // ATRIBUTOS QUE AS IMAGENS DOS PERSONAGENS SERAO CARREGADAS
     private BufferedImage imgAtual;
@@ -34,9 +37,12 @@ public class Game extends JPanel {
 
     // MÉTODO CONSTRUTOR ---------------------------------------
     public Game() {
-        setBackground(Color.decode("#ffe6f9"));
+        setBackground(Color.decode("#fa66948"));
         setFocusable(true);
         setLayout(null);
+
+        imgAtual = pers1.mBlueDireita;
+        imgPers2 = pers2.mGreenEsquerda;
 
         // INICIA TRATAMETNO COM TECLADO DO PERS1
         addKeyListener(new KeyListener() {
@@ -61,12 +67,6 @@ public class Game extends JPanel {
                     case KeyEvent.VK_D:
                         k_direita = false;
                         break;
-
-                    /*
-                     * case KeyEvent.VK_Q:
-                     * k_tiro = false;
-                     * break;
-                     */
                 }
             }
 
@@ -115,7 +115,7 @@ public class Game extends JPanel {
                         break;
                     case KeyEvent.VK_RIGHT:
                         k_direita2 = false;
-                        break;
+                        break;                       
                 }
             }
 
@@ -135,6 +135,9 @@ public class Game extends JPanel {
                     case KeyEvent.VK_RIGHT:
                         k_direita2 = true;
                         break;
+                    case KeyEvent.VK_CONTROL:
+                        k_tiro2 = true;
+                        break; 
                 }
             }
         });
@@ -173,11 +176,11 @@ public class Game extends JPanel {
         pers1.velY = 0;
 
         // SE O PERSONAGEM 1 ESTIVER A ESQUERDA DO PERS 2 ENTAO VIRE PERS 1 PARA DIREITA
-        if (pers2.posX2 < pers1.posX) {
+        /*if (pers2.posX2 < pers1.posX) {
             imgAtual = pers1.mBlueEsqueda;
         } else {
             imgAtual = pers1.mBlueDireita;
-        }
+        }*/
 
         // TECLA QUE DISPARA O TIRO
         if (k_tiro == true) {
@@ -222,10 +225,15 @@ public class Game extends JPanel {
         pers2.velY2 = 0;
 
         // SE O PERSONAGEM 2 ESTIVER A ESQUERDA DO PERS 1 ENTAO VIRE PERS 2 PARA DIREITA
-        if (pers2.posX2 < pers1.posX) {
+        /*if (pers2.posX2 < pers1.posX) {
             imgPers2 = pers2.mGreenDireita;
         } else {
             imgPers2 = pers2.mGreenEsquerda;
+        }*/
+
+        // TECLA QUE DISPARA O TIRO
+        if (k_tiro2 == true) {
+            update();
         }
 
         // MOVIMENTOS EM TODOS OS SENTIDOS PERS 2
@@ -278,13 +286,13 @@ public class Game extends JPanel {
             tiro.velX = 0;
             tiro.velY = 0;
             if (imgAtual == pers1.mBlueDireita) {
-                tiro.velX = 2;
+                tiro.velX = 4;
             } else if (imgAtual == pers1.mBlueEsqueda) {
-                tiro.velX = -2;
+                tiro.velX = -4;
             } else if (imgAtual == pers1.mBlueBaixo) {
-                tiro.velY = 2;
+                tiro.velY = 4;
             } else if (imgAtual == pers1.mBlueCima) {
-                tiro.velY = -2;
+                tiro.velY = -4;
             }
         }
 
@@ -296,12 +304,47 @@ public class Game extends JPanel {
         pers2.posX2 = pers2.posX2 + pers2.velX2;
         pers2.posY2 = pers2.posY2 + pers2.velY2;
 
+        // TIRO DE PERS 2
+        if (k_tiro2 == true) {
+            k_tiro2 = false;
+            tiro2.visible2 = true;
+            tiro2.posX2 = pers2.posX2;
+            tiro2.posY2 = pers2.posY2;
+            // DEFINE A DIREÇÃO DO TIRO 2
+            tiro2.velX2 = 0;
+            tiro2.velY2 = 0;
+            if (imgPers2 == pers2.mGreenDireita) {
+                tiro2.velX2 = 4;
+            } else if (imgPers2 == pers2.mGreenEsquerda) {
+                tiro2.velX2 = -4;
+            } else if (imgPers2 == pers2.mGreenBaixo) {
+                tiro2.velY2 = 4;
+            } else if (imgPers2 == pers2.mGreenCima) {
+                tiro2.velY2 = -4;
+            }
+
+            
+        }
+
+        // ATUALIZA POSIÇÃO DO TIRO 2
+        tiro2.posX2 += tiro2.velX2;
+        tiro2.posY2 += tiro2.velY2;
+
         // ATUALIZAÇÃO DO CENTRO DO PERSONAGEM 1
         pers1.centroX = pers1.posX + pers1.raio;
         pers1.centroY = pers1.posY + pers1.raio;
 
+        // ATUALIZAÇÃO DO CENTRO DO PERSONAGEM 2
         pers2.centroX2 = pers2.posX2 + pers2.raio2;
         pers2.centroY2 = pers2.posY2 + pers2.raio2;
+
+        // ATUALIZAÇÃO DO CENTRO DO TIRO
+        tiro.centroX = tiro.posX + tiro.raio;
+        tiro.centroY = tiro.posY + tiro.raio;
+
+        // ATUALIZAÇÃO DO CENTRO DO TIRO 2
+        tiro2.centroX2 = tiro2.posX2 + tiro2.raio2;
+        tiro2.centroY2 = tiro2.posY2 + tiro2.raio2;
 
         testeColisoes();
     }
@@ -349,31 +392,45 @@ public class Game extends JPanel {
             pers2.posX2 = pers2.posX2 - pers2.velX2;
             pers2.posY2 = pers2.posY2 - pers2.velY2;
         }
+
+        // TESTE DE COLISAO ENTRE TIRO (DO 1 PARA 2)
+        int chT = Math.abs(tiro.centroX - pers2.centroX2);
+        int cvT = Math.abs(tiro.centroY - pers2.centroY2);
+        double hT = Math.sqrt((chT * chT) + (cvT * cvT));
+
+        if (hT <= tiro.raio + pers2.raio2) {
+            tiro.visible = false;
+        }
+
+        // TESTE DE COLISAO ENTRE TIRO (DO 2 PARA 1)
+        int chT2 = Math.abs(tiro2.centroX2 - pers1.centroX);
+        int cvT2 = Math.abs(tiro2.centroY2 - pers1.centroY);
+        double hT2 = Math.sqrt((chT2 * chT2) + (cvT2 * cvT2));
+
+        if (hT2 <= tiro2.raio2 + pers1.raio) {
+            tiro2.visible2 = false;
+        }
     }
 
     // MÉTODOS SOBRESCRITOS -----------------------------------
-
-    Tiro tiro2 = new Tiro();
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // faça o que a classe original faz
-
-        // DESENHANDO BOLA NA TELA
-        // g.setColor(Color.decode("#FF8095")); // MUDA A COR DO PERS1
-        // g.fillOval(pers1.posX, pers1.posY, pers1.raio * 2, pers1.raio * 2); //
-        // desenha bola
-        g.setColor(Color.decode("#290066")); // MUDA A COR DO PERS2
-        // g.fillOval(pers2.posX2, pers2.posY2, pers2.raio * 2, pers2.raio * 2); //
+       
+        g.setColor(Color.decode("#290066")); // MUDA A COR DO TIRO
 
         if (tiro.visible == true) {
-            g.fillOval(tiro.posX, tiro.posY, tiro.raio * 2, tiro.raio * 2); //
+            g.fillOval(tiro.posX, tiro.posY, tiro.raio * 2, tiro.raio * 2);
+
+        }
+        g.setColor(Color.decode("#29FFE2"));
+        
+        if (tiro2.visible2 == true) {
+            g.fillOval(tiro2.posX2, tiro2.posY2, tiro2.raio2 * 2, tiro2.raio2 * 2);
         }
 
-        // desenha bola
-        // DESENHA IMAGEM COM PERSONAGEM
-        g.drawImage(imgAtual, pers1.posX, pers1.posY, null); // comando
-        g.drawImage(imgPers2, pers2.posX2, pers2.posY2, null); // comando
+        g.drawImage(imgAtual, pers1.posX, pers1.posY, null); 
+        g.drawImage(imgPers2, pers2.posX2, pers2.posY2, null);
 
     }
 }

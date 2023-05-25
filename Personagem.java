@@ -47,6 +47,8 @@ public class Personagem {
         posX = 100;
         posY = 100;
 
+        
+
         // ATRIBUTOS PERSONAGEM 2
         raio2 = 25;
         velX2 = 2;
